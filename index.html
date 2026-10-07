@@ -14,7 +14,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 48px}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 48px;position:relative}
 
   /* Filter chips */
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5}
@@ -288,15 +288,19 @@ function filter(key){
   sections.querySelectorAll("section").forEach(s=>s.hidden = key!=="all" && s.dataset.key!==key);
 }
 
-/* After picking a chip, scroll so the sticky chip bar sits at the top and the videos start right below it */
-/* Extra space above the chip bar after a jump (px). Raise it if a fixed header on the host page covers the nav. */
-const JUMP_OFFSET = 110;
+/* After picking a chip, scroll so the chip bar and the videos below it are in view */
+/* Space left above the chip bar after a jump (px): the host page's fixed header (~70px) plus breathing room.
+   Raise it if the header still covers the nav. */
+const JUMP_OFFSET = 100;
 function jumpToVideos(){
-  const first = sections.querySelector("section:not([hidden])");
-  if(!first) return;
-  /* leave room for the whole chip bar (it wraps to more rows on narrow screens) plus its bottom margin */
-  first.style.scrollMarginTop = (chips.offsetHeight + JUMP_OFFSET) + "px";
-  first.scrollIntoView({behavior:"smooth",block:"start"});
+  /* scroll-margin isn't honoured when the browser scrolls the page around an embed, so aim at an invisible marker
+     placed above the chip bar instead */
+  const wrap = document.getElementById("library");
+  let m = document.getElementById("jumpMark");
+  if(!m){ m = document.createElement("span"); m.id = "jumpMark"; m.style.cssText = "position:absolute;left:0;width:1px;height:1px;pointer-events:none"; wrap.appendChild(m); }
+  const chipsTop = chips.getBoundingClientRect().top - wrap.getBoundingClientRect().top;
+  m.style.top = Math.max(0, chipsTop - JUMP_OFFSET) + "px";
+  m.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 /* Lightbox */
