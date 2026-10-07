@@ -251,7 +251,7 @@ function chip(key,label,count){
   const b=document.createElement("button");
   b.className="chip"; b.dataset.key=key; b.setAttribute("aria-pressed",key==="all");
   b.innerHTML=label+'<span class="n">'+count+'</span>';
-  b.onclick=()=>filter(key);
+  b.onclick=()=>{ filter(key); jumpToVideos(); };
   chips.appendChild(b);
 }
 chip("all","All videos",VIDEOS.length);
@@ -286,6 +286,12 @@ function setThumb(el,id,h){
 function filter(key){
   chips.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.key===key));
   sections.querySelectorAll("section").forEach(s=>s.hidden = key!=="all" && s.dataset.key!==key);
+}
+
+/* After picking a chip, scroll so the sticky chip bar sits at the top and the videos start right below it */
+function jumpToVideos(){
+  const top = sections.getBoundingClientRect().top + window.scrollY - chips.offsetHeight - 8;
+  window.scrollTo({top:Math.max(0,top),behavior:"smooth"});
 }
 
 /* Lightbox */
