@@ -24,7 +24,7 @@
   .chip .n{font-weight:500;opacity:.6;margin-left:6px}
 
   /* Sections */
-  section{margin-bottom:40px;scroll-margin-top:70px}
+  section{margin-bottom:40px}
   section[hidden]{display:none}
   .sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--navy);padding-bottom:10px;margin-bottom:18px}
   .sec-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
@@ -291,7 +291,10 @@ function filter(key){
 /* After picking a chip, scroll so the sticky chip bar sits at the top and the videos start right below it */
 function jumpToVideos(){
   const first = sections.querySelector("section:not([hidden])");
-  if(first) first.scrollIntoView({behavior:"smooth",block:"start"});
+  if(!first) return;
+  /* leave room for the whole chip bar (it wraps to more rows on narrow screens) plus its bottom margin */
+  first.style.scrollMarginTop = (chips.offsetHeight + 36) + "px";
+  first.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 /* Lightbox */
