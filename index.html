@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voices of Innovation | Acteon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0E2A3A; --cyan:#00B0DB; --ink:#0E2A3A; --muted:#5B6B75;
+    --line:#E3E9ED; --bg:#FFFFFF; --chip:#F2F6F8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 48px}
+
+  /* Filter chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5}
+  .chip{font:600 14px/1 Inter,sans-serif;color:var(--navy);background:var(--chip);border:1px solid transparent;border-radius:999px;padding:10px 16px;cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:var(--cyan)}
+  .chip[aria-pressed="true"]{background:var(--navy);color:#fff}
+  .chip .n{font-weight:500;opacity:.6;margin-left:6px}
+
+  /* Sections */
+  section{margin-bottom:40px}
+  section[hidden]{display:none}
+  .sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--navy);padding-bottom:10px;margin-bottom:18px}
+  .sec-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+  .sec-head p{font-size:14px;color:var(--muted)}
+  .sec-head .bar{width:4px;height:20px;background:var(--cyan);border-radius:2px;align-self:center}
+
+  /* Cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
+  .card{all:unset;cursor:pointer;display:block;border-radius:10px;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .15s, box-shadow .15s}
+  .card:hover,.card:focus-visible{transform:translateY(-3px);box-shadow:0 10px 24px rgba(14,42,58,.12)}
+  .card:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+  .thumb{position:relative;aspect-ratio:16/9;background:var(--navy) center/cover no-repeat}
+  .thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,42,58,0) 55%,rgba(14,42,58,.55))}
+  .play{position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:rgba(0,176,219,.92);display:grid;place-items:center;z-index:1;transition:transform .15s}
+  .card:hover .play{transform:scale(1.08)}
+  .play svg{width:20px;height:20px;margin-left:3px;fill:#fff}
+  .dur{position:absolute;right:10px;bottom:10px;z-index:1;color:#fff;font:600 12px/1 Inter,sans-serif;background:rgba(0,0,0,.45);padding:5px 7px;border-radius:4px}
+  .meta{padding:14px 16px 16px}
+  .meta .who{font-size:16px;font-weight:600;line-height:1.3}
+  .meta .what{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+
+  /* Lightbox */
+  .lb{position:fixed;inset:0;background:rgba(8,22,31,.88);display:none;align-items:center;justify-content:center;padding:24px;z-index:50}
+  .lb.open{display:flex}
+  .lb-inner{width:min(1100px,100%)}
+  .lb-frame{position:relative;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}
+  .lb-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .lb-cap{color:#fff;margin-top:12px;font-size:15px;font-weight:600}
+  .lb-cap span{display:block;font-weight:400;font-size:13px;opacity:.7;margin-top:2px}
+  .lb-x{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:34px;line-height:1;cursor:pointer;padding:6px}
+  .lb-x:focus-visible{outline:2px solid var(--cyan)}
+
+  /* Hero */
+  .hero{background:var(--navy);color:#fff;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;right:-160px;top:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(0,176,219,.35),rgba(0,176,219,0) 70%)}
+  .hero-in{position:relative;max-width:1180px;margin:0 auto;padding:72px 20px 80px;display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:18px}
+  .eyebrow::before{content:"";width:28px;height:2px;background:var(--cyan)}
+  .hero h1{font-size:clamp(36px,5vw,58px);font-weight:800;line-height:1.04;letter-spacing:-.025em}
+  .hero h1 em{font-style:normal;color:var(--cyan)}
+  .hero .lede{font-size:18px;line-height:1.6;color:rgba(255,255,255,.78);margin:22px 0 32px;max-width:520px}
+  .btns{display:flex;flex-wrap:wrap;gap:12px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font:600 15px/1 Inter,sans-serif;text-decoration:none;border-radius:999px;padding:15px 24px;transition:all .15s;cursor:pointer;border:0}
+  .btn-p{background:var(--cyan);color:var(--navy)}
+  .btn-p:hover{background:#fff}
+  .btn-g{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4)}
+  .btn-g:hover{box-shadow:inset 0 0 0 1.5px #fff}
+  .feat{all:unset;cursor:pointer;display:block;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35);transition:transform .2s}
+  .feat:hover{transform:translateY(-4px)}
+  .feat:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}
+  .feat .thumb{aspect-ratio:16/9}
+  .feat .play{width:76px;height:76px;margin:-38px 0 0 -38px}
+  .feat .play svg{width:26px;height:26px}
+  .feat-cap{background:#123547;padding:16px 20px}
+  .feat-cap .tag{margin-bottom:4px}
+  .feat-cap .who{font-size:16px;font-weight:600;line-height:1.35}
+
+  /* Stats */
+  .stats{max-width:1180px;margin:-34px auto 0;padding:0 20px;position:relative;z-index:2}
+  .stats-in{background:#fff;border-radius:14px;box-shadow:0 12px 32px rgba(14,42,58,.12);display:grid;grid-template-columns:repeat(3,1fr)}
+  .stat{padding:22px 26px;border-left:1px solid var(--line)}
+  .stat:first-child{border-left:0}
+  .stat b{display:block;font-size:30px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+  .stat span{font-size:14px;color:var(--muted)}
+
+  .lib-head{margin:56px 0 18px}
+  .lib-head h2{font-size:32px;font-weight:800;letter-spacing:-.02em}
+  .lib-head p{color:var(--muted);font-size:16px;margin-top:6px}
+
+  /* Closing CTA */
+  .cta{max-width:1180px;margin:0 auto 56px;padding:0 20px}
+  .cta-in{background:linear-gradient(120deg,var(--navy) 55%,#0b4a66);border-radius:16px;color:#fff;padding:44px 48px;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+  .cta h3{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+  .cta p{color:rgba(255,255,255,.75);margin-top:8px;font-size:16px}
+  .foot{max-width:1180px;margin:0 auto;padding:0 20px 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .foot a{color:var(--navy);font-weight:600;font-size:14px;text-decoration:none}
+  .foot a:hover{color:var(--cyan)}
+
+  @media (max-width:860px){
+    .hero-in{grid-template-columns:1fr;gap:36px;padding:52px 20px 72px}
+  }
+  @media (max-width:600px){
+    .stats-in{grid-template-columns:1fr}
+    .stat{border-left:0;border-top:1px solid var(--line);padding:16px 20px}
+    .stat:first-child{border-top:0}
+    .cta-in{padding:32px 24px}
+    .lib-head h2{font-size:26px}
+    .wrap{padding:18px 16px 32px}
+    .sec-head{flex-direction:column;gap:4px}
+    .sec-head .bar{display:none}
+    .chip{font-size:13px;padding:9px 13px}
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-in">
+    <div>
+      <div class="eyebrow">Voices of Innovation</div>
+      <h1>Hear it from <em>the chair.</em></h1>
+      <p class="lede">Dentists and hygienists share, in their own words, how Acteon imaging, surgery and hygiene solutions fit into their everyday practice.</p>
+      <div class="btns">
+        <a class="btn btn-p" href="https://www.acteongroup.com/hub/product-catalog/contact-us" target="_top">Start your story: request a demo</a>
+        <a class="btn btn-g" href="#library">Browse the videos &darr;</a>
+      </div>
+    </div>
+    <button class="feat" id="feat" aria-label="Play featured video"></button>
+  </div>
+</header>
+
+<div class="stats"><div class="stats-in">
+  <div class="stat"><b id="statVideos">0</b><span>clinician videos</span></div>
+  <div class="stat"><b id="statProducts">0</b><span>Acteon solutions featured</span></div>
+  <div class="stat"><b id="statVoices">0</b><span>dentists &amp; hygienists</span></div>
+</div></div>
+
+<div class="wrap" id="library">
+  <div class="lib-head">
+    <h2>Explore by product</h2>
+    <p>Pick a solution to see what clinicians are saying about it.</p>
+  </div>
+  <nav class="chips" id="chips" aria-label="Filter videos by product"></nav>
+  <div id="sections"></div>
+</div>
+
+<div class="cta"><div class="cta-in">
+  <div>
+    <h3>Ready to write your own story?</h3>
+    <p>See any of these solutions in action with a personal demo.</p>
+  </div>
+  <a class="btn btn-p" href="https://www.acteongroup.com/hub/product-catalog/contact-us" target="_top">Request a demo</a>
+</div></div>
+
+<div class="foot">
+  <a href="https://www.acteongroup.com/hub/product-catalog/" target="_top">&larr; Explore more Acteon products</a>
+  <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top &uarr;</a>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Video player">
+  <button class="lb-x" id="lbClose" aria-label="Close video">&times;</button>
+  <div class="lb-inner">
+    <div class="lb-frame" id="lbFrame"></div>
+    <div class="lb-cap" id="lbCap"></div>
+  </div>
+</div>
+
+<script>
+/* ====== EDIT HERE: products and videos ======
+   To add a video: copy a line, change the Vimeo ID, name and product key.
+   Thumbnails load automatically from Vimeo.
+   Unlisted video (link like vimeo.com/123/abc456)? Add  h:"abc456"  to its line. */
+const PRODUCTS = [
+  { key:"optima",  name:"X-Mind Optima",   blurb:"3D CBCT imaging" },
+  { key:"ais",     name:"AIS Imaging Suite", blurb:"Acteon Imaging Suite software" },
+  { key:"cube",    name:"Piezotome Cube",  blurb:"Piezoelectric bone surgery" },
+  { key:"c50",     name:"C50",             blurb:"Intraoral camera" },
+  { key:"newtron", name:"Newtron",         blurb:"Ultrasonic scaling" },
+  { key:"xmlite",  name:"XM Lite",         blurb:"" },
+  { key:"partners",name:"Education Partners", blurb:"Long-term clinical partnerships" }
+];
+
+const VIDEOS = [
+  { id:"1220925048", product:"optima",  who:"Dr. Brian McGue",       what:"X-Mind Optima 3D CBCT", dur:172 },
+  { id:"1123702941", product:"optima",  who:"Dr. Anthony Bianco",    what:"X-Mind Optima CBCT", dur:79 },
+  { id:"1104586829", product:"optima",  who:"Dr. Steven Vorholt",    what:"X-Mind Optima with AIS overview", dur:236 },
+  { id:"1021437305", product:"optima",  who:"Dr. Steven Vorholt",    what:"Expanding the field of view", dur:67 },
+  { id:"1021432796", product:"optima",  who:"Dr. Steven Vorholt",    what:"Getting the most out of your CBCT investment", dur:94 },
+  { id:"1021440358", product:"ais",     who:"Dr. Steven Vorholt",    what:"AI-empowered Acteon Imaging Suite", dur:48 },
+  { id:"1021432467", product:"ais",     who:"Dr. Steven Vorholt",    what:"The power of the Acteon Imaging Suite", dur:60 },
+  { id:"1021550191", product:"ais",     who:"AIS",                   what:"Everything in one place", dur:40 },
+  { id:"1115941862", product:"cube",    who:"Dr. Todd Engel",        what:"Piezotome Cube", dur:332 },
+  { id:"1105567607", product:"cube",    who:"Dr. Steven Vorholt",    what:"Implant preparation with the Piezotome Cube", dur:106 },
+  { id:"1021432598", product:"cube",    who:"Dr. Steven Vorholt",    what:"The Piezotome Cube", dur:71 },
+  { id:"1021432574", product:"cube",    who:"Dr. Steven Vorholt",    what:"The Cube for clean extraction and preserved sockets", dur:46 },
+  { id:"1124031851", product:"c50",     who:"Neely Zollman, RD",     what:"C50 Intraoral Camera", dur:112 },
+  { id:"1099153092", product:"c50",     who:"Halsey Engleman, RDH",  what:"C50 Intraoral Camera", dur:114 },
+  { id:"1088207142", product:"c50",     who:"Lyndsay, RDH",          what:"C50 Intraoral Camera", dur:75 },
+  { id:"1010987402", h:"14e9393bfc", product:"c50", who:"Dr. Robert Grimes", what:"Acteon intraoral cameras", dur:104 },
+  { id:"1086894367", product:"c50",     who:"Dr. Ronald Wheeler",    what:"C50 Intraoral Camera", dur:132 },
+  { id:"1043538962", product:"newtron", who:"Dr. Kelly Tanner",      what:"Newtron ultrasonic scaler", dur:219 },
+  { id:"1162868216", product:"newtron", who:"Ashley, RDH",           what:"Newtron ultrasonic piezo scaler", dur:51 },
+  { id:"1126470356", product:"newtron", who:"Renada, RDH",           what:"Newtron ultrasonic scaler", dur:51 },
+  { id:"1022206977", product:"xmlite",  who:"XM Lite",               what:"Easy to handle and simple to use", dur:24 },
+  { id:"1023521747", product:"xmlite",  who:"XM Lite",               what:"Product overview", dur:38 },
+  { id:"1152553364", product:"partners",who:"Dr. Justin Moody",      what:"A decade of innovation: Acteon & Implant Pathway", dur:325 }
+];
+
+/* Optional: paste Vimeo thumbnail URLs here to skip the lookup (id: url) */
+const THUMBS = {
+  "1220925048":"https://i.vimeocdn.com/video/2193526105-2722a166f4cbc69b83ea63f1f2dadb8655cee41b2a88890fc3a9049b9e031a42-d_640",
+  "1115941862":"https://i.vimeocdn.com/video/2055425702-df0b4e0e0e4479490f3aea85671c31ef82ab018b5162f0923231cfa162b6c46a-d_640",
+  "1152553364":"https://i.vimeocdn.com/video/2104235890-b225e734fc10a5e0510e96b8c4c4a1bdb7427da22588a8bac549e05d7221eabe-d_640",
+  "1105567607":"https://i.vimeocdn.com/video/2042123205-4c2d868e8b1052c1cb74ad9081389c053ccf07734e3df4af21be88e3a151964b-d_640",
+  "1126470356":"https://i.vimeocdn.com/video/2068930944-523de345ac050091bcb80dbd781a6ae883298557b2cf6f6b59bc3daad28a8d6e-d_640",
+  "1124031851":"https://i.vimeocdn.com/video/2071541477-44d9b76062e97cc9c8158c1aec1e6b2b6d551ef5a2f13896c8369c10f53ec0c8-d_640",
+  "1123702941":"https://i.vimeocdn.com/video/2066018063-cbe3ff697adf2c070e4b61c4e88fee12ccb1f08d5ea0533c4dd0fa69f7d3cf21-d_640",
+  "1104586829":"https://i.vimeocdn.com/video/2173605245-7dac4ce7becb5f0f323018ba2b356f6baa649c7da4acdd1285ee84c4c31ca437-d_640",
+  "1099153092":"https://i.vimeocdn.com/video/2034010942-48f4dd1c9360119b35f4cdbb8c1f1db8441f6b13b7a304287eba45551cd547e7-d_640",
+  "1088207142":"https://i.vimeocdn.com/video/2020375262-299cd241e240a6da1a2fa555a9ae471349904395515b89cb0f8f8b72601297ee-d_640",
+  "1086894367":"https://i.vimeocdn.com/video/2018765102-e785ccb7b3585f5f6f2e45c43f0531324033d66cc8481e93441db32cc1863326-d_640",
+  "1043538962":"https://i.vimeocdn.com/video/2017335633-64dbf48397ab351b5deb6476653b7752069deb88aaf9321ac9c600b9f2b8d775-d_640",
+  "1022206977":"https://i.vimeocdn.com/video/1941193537-cdf8ed129a38b56c0228498513a17aa06ceda73475f43e07b8b3534dac378fc2-d_640",
+  "1023521747":"https://i.vimeocdn.com/video/1942687691-4c30d6ffb87fa86588e214719bd832877795b1d973dcea791483108d336be690-d_640",
+  "1021550191":"https://i.vimeocdn.com/video/1940336073-bbb8b4ed9bbb0d313669db3839c0b5402c36b9ff860be4e32907d5a1187f2ae0-d_640",
+  "1021440358":"https://i.vimeocdn.com/video/1940210763-7031b0886a8b88ebea740fb1b98c5d1015666452b9bb48a8e9f2e0bc184eb3d6-d_640",
+  "1021437305":"https://i.vimeocdn.com/video/1940204885-e2aad8dc79389aa89fffbfaa52e196114c3d4046f7910fd5dce97c5d66aeb451-d_640",
+  "1021432796":"https://i.vimeocdn.com/video/1940199796-7a1f0cc93c1bb2593f24894f36b0ab7bc5b1c1b020e643c265fb775eff3e8370-d_640",
+  "1021432598":"https://i.vimeocdn.com/video/1940205146-0f5332621cb05289579b01b117fd318ad7105b1d402be7eced7455744f411aa8-d_640",
+  "1021432574":"https://i.vimeocdn.com/video/1940199477-17596f3825a1dbd9a98d2057e8c53ff37a01e29a19c7fc2696e4e4c487a09bad-d_640",
+  "1021432467":"https://i.vimeocdn.com/video/1940199379-efd074dea1c56e8e19337a4a34dbb566d615785d9eb69c840b5bf9c00d4f5517-d_640",
+  "1162868216":"https://i.vimeocdn.com/video/2118824130-4bc8e6da7536e2ff50117d71fd31fb2d36c2967ff2fad49fcf104874fee7ade0-d_640",
+  "1010987402":"https://i.vimeocdn.com/video/1928459108-227cf0991ad7793a98450abe706bdf6aa106de4a86bfdf81271a2b2b2ad709fb-d_640"
+};
+/* ============================================ */
+
+const fmt = s => s ? Math.floor(s/60)+":"+String(s%60).padStart(2,"0") : "";
+const chips = document.getElementById("chips");
+const sections = document.getElementById("sections");
+const playIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z"/></svg>';
+
+function chip(key,label,count){
+  const b=document.createElement("button");
+  b.className="chip"; b.dataset.key=key; b.setAttribute("aria-pressed",key==="all");
+  b.innerHTML=label+'<span class="n">'+count+'</span>';
+  b.onclick=()=>filter(key);
+  chips.appendChild(b);
+}
+chip("all","All videos",VIDEOS.length);
+
+PRODUCTS.forEach(p=>{
+  const vids=VIDEOS.filter(v=>v.product===p.key);
+  if(!vids.length) return;
+  chip(p.key,p.name,vids.length);
+  const sec=document.createElement("section");
+  sec.dataset.key=p.key;
+  sec.innerHTML='<div class="sec-head"><span class="bar"></span><h2>'+p.name+'</h2>'+(p.blurb?'<p>'+p.blurb+'</p>':'')+'</div><div class="grid"></div>';
+  const grid=sec.querySelector(".grid");
+  vids.forEach(v=>{
+    const c=document.createElement("button");
+    c.className="card"; c.setAttribute("aria-label","Play: "+v.who+", "+v.what);
+    c.innerHTML='<div class="thumb" data-id="'+v.id+'"><div class="play">'+playIcon+'</div><span class="dur">'+fmt(v.dur)+'</span></div>'+
+      '<div class="meta"><div class="tag">'+p.name+'</div><div class="who">'+v.who+'</div><div class="what">'+v.what+'</div></div>';
+    c.onclick=()=>openVideo(v);
+    grid.appendChild(c);
+    setThumb(c.querySelector(".thumb"),v.id,v.h);
+  });
+  sections.appendChild(sec);
+});
+
+function setThumb(el,id,h){
+  if(THUMBS[id]){ el.style.backgroundImage='url("'+THUMBS[id]+'")'; return; }
+  fetch("https://vimeo.com/api/oembed.json?width=640&url="+encodeURIComponent("https://vimeo.com/"+id+(h?"/"+h:"")))
+    .then(r=>r.json()).then(j=>{ if(j.thumbnail_url) el.style.backgroundImage='url("'+j.thumbnail_url+'")'; })
+    .catch(()=>{});
+}
+
+function filter(key){
+  chips.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.key===key));
+  sections.querySelectorAll("section").forEach(s=>s.hidden = key!=="all" && s.dataset.key!==key);
+}
+
+/* Lightbox */
+const lb=document.getElementById("lb"), frame=document.getElementById("lbFrame"), cap=document.getElementById("lbCap");
+let lastFocus=null;
+function openVideo(v){
+  lastFocus=document.activeElement;
+  frame.innerHTML='<iframe src="https://player.vimeo.com/video/'+v.id+'?'+(v.h?'h='+v.h+'&':'')+'autoplay=1&dnt=1&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="'+v.who+'"></iframe>';
+  cap.innerHTML=v.who+'<span>'+v.what+'</span>';
+  lb.classList.add("open");
+  document.getElementById("lbClose").focus();
+}
+function closeVideo(){ lb.classList.remove("open"); frame.innerHTML=""; if(lastFocus) lastFocus.focus(); }
+document.getElementById("lbClose").onclick=closeVideo;
+lb.addEventListener("click",e=>{ if(e.target===lb) closeVideo(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && lb.classList.contains("open")) closeVideo(); });
+
+/* Featured video in the hero — change FEATURED_ID to swap it */
+const FEATURED_ID = "1152553364";
+const fv = VIDEOS.find(v=>v.id===FEATURED_ID) || VIDEOS[0];
+const fp = PRODUCTS.find(p=>p.key===fv.product) || {name:""};
+const feat = document.getElementById("feat");
+feat.innerHTML='<div class="thumb"><div class="play">'+playIcon+'</div><span class="dur">'+fmt(fv.dur)+'</span></div>'+
+  '<div class="feat-cap"><div class="tag">Featured</div><div class="who">'+fv.who+': '+fv.what+'</div></div>';
+setThumb(feat.querySelector(".thumb"),fv.id,fv.h);
+feat.onclick=()=>openVideo(fv);
+
+/* Stats (calculated automatically) */
+const people=new Set(VIDEOS.map(v=>v.who).filter(w=>/^Dr\.|RDH|RD\b/.test(w)));
+const used=new Set(VIDEOS.map(v=>v.product).filter(k=>k!=="partners"));
+document.getElementById("statVideos").textContent=VIDEOS.length;
+document.getElementById("statProducts").textContent=used.size;
+document.getElementById("statVoices").textContent=people.size;
+
+/* Deep link: ?product=cube opens pre-filtered (handy for per-product Foleon pages) */
+const q=new URLSearchParams(location.search).get("product");
+if(q && PRODUCTS.some(p=>p.key===q)) filter(q);
+</script>
+</body>
+</html>
