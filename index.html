@@ -289,11 +289,13 @@ function filter(key){
 }
 
 /* After picking a chip, scroll so the sticky chip bar sits at the top and the videos start right below it */
+/* Extra space above the chip bar after a jump (px). Raise it if a fixed header on the host page covers the nav. */
+const JUMP_OFFSET = 110;
 function jumpToVideos(){
   const first = sections.querySelector("section:not([hidden])");
   if(!first) return;
   /* leave room for the whole chip bar (it wraps to more rows on narrow screens) plus its bottom margin */
-  first.style.scrollMarginTop = (chips.offsetHeight + 36) + "px";
+  first.style.scrollMarginTop = (chips.offsetHeight + JUMP_OFFSET) + "px";
   first.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
